@@ -32,7 +32,7 @@ export const Navbar: React.FC<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTM
       <Link
         href={'/'}
         className={
-          'flex justify-center items-center space-x-1.5 text-stone-400 font-semibold hover:text-stone-100 duration-150'
+          'flex justify-center items-center space-x-1.5 font-semibold text-stone-950 dark:text-stone-400 hover:text-stone-600 dark:hover:text-stone-100 duration-150'
         }
       >
         <GridOutline />
@@ -50,7 +50,7 @@ export const Navbar: React.FC<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTM
       </div> */}
 
       <div className={'flex items-center space-x-4'}>
-        <span className={'hidden sm:block font-medium text-sm text-stone-400'}>
+        <span className={'hidden sm:block font-medium text-sm text-stone-950 dark:text-stone-400'}>
           {new Intl.DateTimeFormat('en-US', {
             hour: '2-digit',
             minute: '2-digit',
