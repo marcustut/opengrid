@@ -6,12 +6,12 @@ const ga = {
     signOut: 'Logáil Amach',
     signInDescription: 'Sínigh isteach nó cláraigh thíos.',
     email: 'Ríomhphost',
-    continueWith: 'Ar aghaidh le {provider:string}',
-    signInWith: 'Sínigh isteach le {provider:string}',
-    magicLinkSent: '✅ Nasc draíochta seolta chuig {email:string}',
-    failedMagicLink: 'Theip ar an nasc draíochta a sheoladh chuig {email:string}',
+    continueWith: 'Ar aghaidh le {provider}',
+    signInWith: 'Sínigh isteach le {provider}',
+    magicLinkSent: '✅ Nasc draíochta seolta chuig {email}',
+    failedMagicLink: 'Theip ar an nasc draíochta a sheoladh chuig {email}',
   },
-  welcomeTo: 'Fáilte go {name:string}',
+  welcomeTo: 'Fáilte go {name}',
 } satisfies Translation;
 
 export default ga;
