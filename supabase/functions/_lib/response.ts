@@ -6,6 +6,8 @@ const corsHeaders = {
 };
 const headers = { 'Content-Type': 'application/json', ...corsHeaders };
 
+export type Response<T> = { data: T; error: null } | { data: null; error: string };
+
 export const makeSuccessResponse = <T>(data: T) =>
   new Response(JSON.stringify({ data, error: null }), { status: 200, headers });
 export const makeErrorResponse = (e: unknown, status?: number) => {

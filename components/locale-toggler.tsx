@@ -52,7 +52,7 @@ export function LocaleToggler() {
         <DropdownMenuItem onClick={() => handleLocaleChange('ga')}>
           <div className="w-full flex items-center">
             <FlagIreland className="w-4 h-4 rounded-[5px] mr-1.5" />
-            Gaelic
+            Gaeilge
             {locale === 'ga' && <CheckBold className="ml-auto w-3 h-3" />}
           </div>
         </DropdownMenuItem>

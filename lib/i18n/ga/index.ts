@@ -11,6 +11,9 @@ const ga = {
     magicLinkSent: '✅ Nasc draíochta seolta chuig {email}',
     failedMagicLink: 'Theip ar an nasc draíochta a sheoladh chuig {email}',
   },
+  loading: 'Ag lódáil {name}...',
+  failedToLoad: 'Theip ar luchtú {name}',
+  systemDemand: 'éileamh córais',
   welcomeTo: 'Fáilte go {name}',
 } satisfies Translation;
 

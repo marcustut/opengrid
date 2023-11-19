@@ -53,6 +53,20 @@ type RootTranslation = {
 		failedMagicLink: RequiredParams<'email'>
 	}
 	/**
+	 * L​o​a​d​i​n​g​ ​{​n​a​m​e​}​.​.​.
+	 * @param {string} name
+	 */
+	loading: RequiredParams<'name'>
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​l​o​a​d​ ​{​n​a​m​e​}
+	 * @param {string} name
+	 */
+	failedToLoad: RequiredParams<'name'>
+	/**
+	 * S​y​s​t​e​m​ ​d​e​m​a​n​d
+	 */
+	systemDemand: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ ​{​n​a​m​e​}
 	 * @param {string} name
 	 */
@@ -94,6 +108,18 @@ export type TranslationFunctions = {
 		 */
 		failedMagicLink: (arg: { email: string }) => LocalizedString
 	}
+	/**
+	 * Loading {name}...
+	 */
+	loading: (arg: { name: string }) => LocalizedString
+	/**
+	 * Failed to load {name}
+	 */
+	failedToLoad: (arg: { name: string }) => LocalizedString
+	/**
+	 * System demand
+	 */
+	systemDemand: () => LocalizedString
 	/**
 	 * Welcome to {name}
 	 */

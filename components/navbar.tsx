@@ -39,8 +39,18 @@ export const Navbar: React.FC<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTM
         <span>OpenGrid</span>
       </Link>
 
+      {/* <div className="fixed left-1/2 -translate-x-1/2 max-w-6xl w-full mx-auto">
+        {[{ name: 'Home', path: '/' }].map(({ name, path }) => (
+          <Link key={name} href={path}>
+            <Button variant="link" className={'text-white'}>
+              {name}
+            </Button>
+          </Link>
+        ))}
+      </div> */}
+
       <div className={'flex items-center space-x-4'}>
-        <span className={'font-medium text-sm text-stone-400'}>
+        <span className={'hidden sm:block font-medium text-sm text-stone-400'}>
           {new Intl.DateTimeFormat('en-US', {
             hour: '2-digit',
             minute: '2-digit',

@@ -5,7 +5,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useEffect, useState } from 'react';
 
 import { Background } from '@/components/background';
-import { Loading } from '@/components/icons/loading';
+import { Loading } from '@/components/loading';
 import { Navbar } from '@/components/navbar';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
@@ -24,17 +24,15 @@ export const ClientProvider: React.FC<{ children: React.ReactNode; locale: Local
     loadLocaleAsync(locale).then(() => setLocaleLoaded(true));
   }, []);
 
-  const mainCn = 'flex min-h-[calc(100vh-60px)] flex-col items-center justify-between p-24';
+  const mainCn =
+    'flex min-h-[calc(100vh-60px)] max-w-6xl mx-auto flex-col items-center justify-between p-10 sm:p-12 md:p-24';
 
   if (!localeLoaded)
     return (
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
         <main className={cn(mainCn, 'flex justify-center items-center')}>
           <Background type="dotted" />
-          <div className="flex flex-col justify-center items-center space-y-2 text-stone-300">
-            <Loading className="animate-spin" />
-            <span className="text-sm">Loading locales...</span>
-          </div>
+          <Loading description="Loading locales..." />
         </main>
       </ThemeProvider>
     );

@@ -1,7 +1,7 @@
 import { format, parse, parseISO } from 'date-fns';
 import { z } from 'zod';
 
-const DATE_PATTERN = 'dd-MMM-yyyy HH:mm';
+const DATE_PATTERN = 'dd-MMM-yyyy HH:mm:ss';
 
 const dateSchema = z.string().transform((x) => parse(x, DATE_PATTERN, new Date()));
 
@@ -31,14 +31,13 @@ export const demandRequestSchema = z.object({
     .union([z.string(), z.date()])
     .transform((x) => (x instanceof Date ? x : (parseISO(x) as Date))),
 });
-export const demandResponseSchema = createDashboardResponseSchema(
-  z.object({
-    EffectiveTime: dateSchema,
-    FieldName: z.enum(['SYSTEM_DEMAND', 'DEMAND_FORECAST_VALUE']),
-    Region: z.enum(['ROI', 'NI']),
-    Value: z.number().nullable(),
-  }),
-);
+export const demandSchema = z.object({
+  EffectiveTime: dateSchema,
+  FieldName: z.enum(['SYSTEM_DEMAND', 'DEMAND_FORECAST_VALUE']),
+  Region: z.enum(['ROI', 'NI']),
+  Value: z.number().nullable(),
+});
+export const demandResponseSchema = createDashboardResponseSchema(demandSchema);
 
 class Client {
   private url = 'https://www.smartgriddashboard.com';
