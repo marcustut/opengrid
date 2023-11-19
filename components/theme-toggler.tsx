@@ -12,8 +12,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
+import { CheckBold } from './icons/check-bold';
+
 export function ThemeToggler() {
-  const { setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
 
   return (
     <DropdownMenu>
@@ -25,9 +27,24 @@ export function ThemeToggler() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme('light')}>Light</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('dark')}>Dark</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('system')}>System</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('light')}>
+          <div className="w-full flex items-center">
+            Light
+            {theme === 'light' && <CheckBold className="ml-auto w-3 h-3" />}
+          </div>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('dark')}>
+          <div className="w-full flex items-center">
+            Dark
+            {theme === 'dark' && <CheckBold className="ml-auto w-3 h-3" />}
+          </div>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('system')}>
+          <div className="w-full flex items-center">
+            System
+            {theme === 'system' && <CheckBold className="ml-auto w-3 h-3" />}
+          </div>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

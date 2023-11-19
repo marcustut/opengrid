@@ -1,10 +1,11 @@
-import { ThemeToggler } from '@/components/theme-toggler';
+import { Demand } from '@/app/(routes)/components';
+import { Background } from '@/components/background';
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      Hello World
-      <ThemeToggler />
-    </main>
+    <>
+      <Demand />
+      <Background type={'dotted'} />
+    </>
   );
 }

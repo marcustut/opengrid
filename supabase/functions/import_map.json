@@ -1,0 +1,6 @@
+{
+  "imports": {
+    "date-fns": "https://unpkg.com/date-fns@2.29.3/esm//index.js",
+    "zod": "https://deno.land/x/zod@v3.22.4/mod.ts"
+  }
+}
