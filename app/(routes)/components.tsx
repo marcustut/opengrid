@@ -67,7 +67,7 @@ export const Demand: React.FC<{ className?: string }> = ({ className }) => {
                 </SelectContent>
               </Select>
             </div>
-            <Badge>
+            <Badge className="hidden sm:block">
               {format(from, 'MMM do, yyyy')} - {format(to, 'MMM do, yyyy')}
             </Badge>
           </div>

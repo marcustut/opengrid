@@ -39,7 +39,7 @@ export const Navbar: React.FC<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTM
         <span>OpenGrid</span>
       </Link>
 
-      {/* <div className="fixed left-1/2 -translate-x-1/2 max-w-6xl w-full mx-auto">
+      {/* <div className="hidden sm:block fixed left-1/2 -translate-x-1/2 max-w-6xl w-full mx-auto">
         {[{ name: 'Home', path: '/' }].map(({ name, path }) => (
           <Link key={name} href={path}>
             <Button variant="link" className={'text-white'}>
