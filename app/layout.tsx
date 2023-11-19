@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 
 import '@/app/globals.css';
@@ -8,9 +8,49 @@ import { loadFormatters, loadLocaleAsync } from '@/lib/i18n/i18n-util.async';
 
 const inter = Inter({ subsets: ['latin'] });
 
+const APP_NAME = 'OpenGrid';
+const APP_DEFAULT_TITLE = 'OpenGrid';
+const APP_TITLE_TEMPLATE = '%s - OpenGrid';
+const APP_DESCRIPTION = 'Use electricity smartly.';
+
 export const metadata: Metadata = {
-  title: 'OpenGrid',
-  description: 'Use electricity smartly.',
+  applicationName: APP_NAME,
+  title: {
+    default: APP_DEFAULT_TITLE,
+    template: APP_TITLE_TEMPLATE,
+  },
+  description: APP_DESCRIPTION,
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: APP_DEFAULT_TITLE,
+    // startUpImage: [],
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  openGraph: {
+    type: 'website',
+    siteName: APP_NAME,
+    title: {
+      default: APP_DEFAULT_TITLE,
+      template: APP_TITLE_TEMPLATE,
+    },
+    description: APP_DESCRIPTION,
+  },
+  twitter: {
+    card: 'summary',
+    title: {
+      default: APP_DEFAULT_TITLE,
+      template: APP_TITLE_TEMPLATE,
+    },
+    description: APP_DESCRIPTION,
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#21C55E',
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
