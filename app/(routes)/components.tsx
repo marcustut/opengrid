@@ -31,7 +31,7 @@ export const Demand: React.FC<{ className?: string }> = ({ className }) => {
 
   return (
     <>
-      <Card className="bg-card/90 dark:bg-card/60">
+      <Card className="bg-card/60">
         <CardHeader>
           <CardTitle>System Demand</CardTitle>
           <CardDescription className="whitespace-pre-wrap">

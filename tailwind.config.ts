@@ -1,4 +1,5 @@
-import type { Config } from 'tailwindcss';
+import { type Config } from 'tailwindcss';
+import colors from 'tailwindcss/colors';
 
 export default {
   darkMode: ['class'],
@@ -18,6 +19,7 @@ export default {
     },
     extend: {
       colors: {
+        stone: colors.stone,
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

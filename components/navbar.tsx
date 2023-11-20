@@ -1,10 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import type { DetailedHTMLProps, HTMLAttributes } from 'react';
 
+import { DashboardDots } from '@/components/icons/dashboard-dots';
 import { GridOutline } from '@/components/icons/grid-outline';
+import { NotificationBell } from '@/components/icons/notification-bell';
 import { LocaleToggler } from '@/components/locale-toggler';
 import { ThemeToggler } from '@/components/theme-toggler';
 import { Button } from '@/components/ui/button';
@@ -15,9 +17,19 @@ import { useI18nContext } from '@/lib/i18n/i18n-react';
 import { useSession } from '@/lib/queries/session';
 import { cn } from '@/lib/utils';
 
+const paths = [
+  { name: 'Home', path: '/', icon: <DashboardDots className="w-[18px] h-[18px]" /> },
+  {
+    name: 'Notification',
+    path: '/notification',
+    icon: <NotificationBell className="w-[18px] h-[18px]" />,
+  },
+];
+
 export const Navbar: React.FC<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>> = (
   props,
 ) => {
+  const pathname = usePathname();
   const supabase = createSupabase();
   const session = useSession();
   const { replace } = useRouter();
@@ -39,15 +51,24 @@ export const Navbar: React.FC<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTM
         <span>OpenGrid</span>
       </Link>
 
-      {/* <div className="hidden sm:block fixed left-1/2 -translate-x-1/2 max-w-6xl w-full mx-auto">
-        {[{ name: 'Home', path: '/' }].map(({ name, path }) => (
+      <div className="hidden sm:flex items-center fixed left-1/2 -translate-x-1/2 max-w-6xl w-full mx-auto">
+        {paths.map(({ name, path, icon }) => (
           <Link key={name} href={path}>
-            <Button variant="link" className={'text-white'}>
-              {name}
+            <Button
+              variant="link"
+              className={cn(
+                'flex items-center space-x-1.5',
+                path === pathname
+                  ? 'text-stone-950 dark:text-stone-50'
+                  : 'text-stone-400 dark:text-stone-400 dark:hover:text-stone-50',
+              )}
+            >
+              {icon}
+              <span>{name}</span>
             </Button>
           </Link>
         ))}
-      </div> */}
+      </div>
 
       <div className={'flex items-center space-x-4'}>
         <span className={'hidden sm:block font-medium text-sm text-stone-950 dark:text-stone-400'}>

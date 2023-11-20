@@ -42,6 +42,7 @@ export const ClientProvider: React.FC<{ children: React.ReactNode; locale: Local
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
         <TypesafeI18n locale={locale}>
           <Navbar />
+          <Background type="dotted" />
           <main className={mainCn}>{children}</main>
           <Toaster />
           <ReactQueryDevtools />
