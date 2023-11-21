@@ -23,7 +23,7 @@ const createDashboardResponseSchema = <T extends z.ZodTypeAny>(type: T) =>
 
 export const demandRequestSchema = z.object({
   type: z.enum(['actual', 'forecast']),
-  region: z.enum(['ROI', 'NI']),
+  region: z.enum(['ROI', 'NI', 'ALL']),
   from: z
     .union([z.string(), z.date()])
     .transform((x) => (x instanceof Date ? x : (parseISO(x) as Date))),
@@ -34,7 +34,7 @@ export const demandRequestSchema = z.object({
 export const demandSchema = z.object({
   EffectiveTime: dateSchema,
   FieldName: z.enum(['SYSTEM_DEMAND', 'DEMAND_FORECAST_VALUE']),
-  Region: z.enum(['ROI', 'NI']),
+  Region: z.enum(['ROI', 'NI', 'ALL']),
   Value: z.number().nullable(),
 });
 export const demandResponseSchema = createDashboardResponseSchema(demandSchema);

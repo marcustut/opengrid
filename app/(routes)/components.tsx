@@ -65,6 +65,7 @@ export const Demand: React.FC<{ className?: string }> = ({ className }) => {
                 <SelectContent>
                   <SelectItem value="ROI">Republic of Ireland</SelectItem>
                   <SelectItem value="NI">Northern Ireland</SelectItem>
+                  <SelectItem value="ALL">All Island</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -82,7 +83,7 @@ export const Demand: React.FC<{ className?: string }> = ({ className }) => {
 };
 
 export const ActualForecastDemand: React.FC<{
-  region: 'ROI' | 'NI';
+  region: 'ROI' | 'NI' | 'ALL';
   from: Date;
   to: Date;
 }> = ({ region, from, to }) => {
