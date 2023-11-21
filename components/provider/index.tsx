@@ -24,14 +24,16 @@ export const ClientProvider: React.FC<{ children: React.ReactNode; locale: Local
     loadLocaleAsync(locale).then(() => setLocaleLoaded(true));
   }, []);
 
-  const mainCn =
-    'flex min-h-[calc(100vh-60px)] max-w-6xl mx-auto flex-col items-center justify-between p-10 sm:p-12 md:p-24';
+  const mainCn = cn(
+    'flex min-h-[calc(100vh-60px)] max-w-6xl mx-auto flex-col items-center justify-between p-10 sm:p-12 md:p-32 xl:p-24',
+    'text-stone-950 dark:text-stone-50',
+  );
 
   if (!localeLoaded)
     return (
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <Background type="dotted" />
         <main className={cn(mainCn, 'flex justify-center items-center')}>
-          <Background type="dotted" />
           <Loading description="Loading locales..." />
         </main>
       </ThemeProvider>

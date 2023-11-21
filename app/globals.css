@@ -58,9 +58,12 @@
   }
 }
 
-/*body {*/
-/*  background: white;*/
-/*  background-image: radial-gradient(black 1px, transparent 0);*/
-/*  background-size: 40px 40px;*/
-/*  background-position: -19px -19px;*/
-/*}*/
+@layer base {
+  :root {
+    --dot-color: 24, 5.7%, 82.9%
+  }
+
+  .dark {
+    --dot-color: 0, 0%, 15.3%
+  }
+}

@@ -1,9 +1,7 @@
 'use client';
 
-import { useTheme } from 'next-themes';
 import type { DetailedHTMLProps, HTMLAttributes } from 'react';
 
-import { theme } from '@/lib/client/theme';
 import { cn } from '@/lib/utils';
 
 const Gradient: React.FC<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>> = (
@@ -24,15 +22,11 @@ const Gradient: React.FC<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLD
 const Dotted: React.FC<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>> = (
   props,
 ) => {
-  const { resolvedTheme } = useTheme();
-
   return (
     <div
       {...props}
       style={{
-        backgroundImage: `radial-gradient(circle at 1px 1px, ${
-          resolvedTheme === 'dark' ? '#272727' : theme.colors.stone[300]
-        } 1px, transparent 0)`,
+        backgroundImage: `radial-gradient(circle at 1px 1px, hsl(var(--dot-color)) 1px, transparent 0)`,
         backgroundSize: '24px 24px',
         ...props.style,
       }}

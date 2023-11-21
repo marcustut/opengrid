@@ -10,7 +10,7 @@ export const Loading: React.FC<{ description: string; className?: string }> = ({
   return (
     <div
       className={cn(
-        'flex flex-col justify-center items-center space-y-2 text-stone-300 text-center',
+        'flex flex-col justify-center items-center space-y-2 text-stone-600 dark:text-stone-300 text-center',
         className,
       )}
     >

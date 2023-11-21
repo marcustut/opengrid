@@ -11,17 +11,17 @@ import { LocaleToggler } from '@/components/locale-toggler';
 import { ThemeToggler } from '@/components/theme-toggler';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { createSupabase } from '@/lib/client/supabase';
+import { useSupabase } from '@/lib/client/supabase';
 import { SECOND, useTimer } from '@/lib/client/timer';
 import { useI18nContext } from '@/lib/i18n/i18n-react';
 import { useSession } from '@/lib/queries/session';
 import { cn } from '@/lib/utils';
 
 const paths = [
-  { name: 'Home', path: '/', icon: <DashboardDots className="w-[18px] h-[18px]" /> },
+  { name: 'Dashboard', path: '/', icon: <DashboardDots className="w-[18px] h-[18px]" /> },
   {
-    name: 'Notification',
-    path: '/notification',
+    name: 'Alert',
+    path: '/alert',
     icon: <NotificationBell className="w-[18px] h-[18px]" />,
   },
 ];
@@ -30,7 +30,7 @@ export const Navbar: React.FC<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTM
   props,
 ) => {
   const pathname = usePathname();
-  const supabase = createSupabase();
+  const supabase = useSupabase();
   const session = useSession();
   const { replace } = useRouter();
   const time = useTimer(SECOND);
@@ -51,7 +51,7 @@ export const Navbar: React.FC<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTM
         <span>OpenGrid</span>
       </Link>
 
-      <div className="hidden sm:flex items-center fixed left-1/2 -translate-x-1/2 max-w-6xl w-full mx-auto">
+      <div className="hidden md:flex items-center fixed left-1/2 -translate-x-1/2 max-w-6xl w-full mx-auto p-10 sm:p-12 md:p-32 xl:p-24">
         {paths.map(({ name, path, icon }) => (
           <Link key={name} href={path}>
             <Button

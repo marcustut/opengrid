@@ -1,9 +1,11 @@
 import { AccessControl } from '@/components/access-control';
 
+import { Alerts } from './component';
+
 export default async function Page() {
   return (
     <AccessControl mode={'private'}>
-      <div className="dark:text-stone-300">Work in progress...</div>
+      <Alerts />
     </AccessControl>
   );
 }

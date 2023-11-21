@@ -2,14 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 import { formatRFC3339, parseISO } from 'date-fns';
 import { z } from 'zod';
 
-import { createSupabase } from '@/lib/client/supabase';
+import type { Supabase } from '@/lib/client/supabase';
 import type { Response } from '@/supabase/functions/_lib/response';
 import type { demandRequestSchema } from '@/supabase/functions/_lib/smartgrid';
 import { demandSchema } from '@/supabase/functions/_lib/smartgrid';
 
-const supabase = createSupabase();
-
-const fetchDemand = async (params: z.infer<typeof demandRequestSchema>) => {
+const fetchDemand = (supabase: Supabase) => async (params: z.infer<typeof demandRequestSchema>) => {
   const { data, error } = await supabase.functions.invoke<Response<z.infer<typeof demandSchema>>>(
     'smartgrid',
     {
@@ -36,9 +34,9 @@ export const demand = {
     ...Object.entries(params).map(([k, v]) => `${k}=${v instanceof Date ? formatRFC3339(v) : v}`),
   ],
   queryFn: fetchDemand,
-  useQuery: (params: z.infer<typeof demandRequestSchema>) =>
+  useQuery: (supabase: Supabase) => (params: z.infer<typeof demandRequestSchema>) =>
     useQuery({
       queryKey: demand.queryKey(params),
-      queryFn: () => demand.queryFn(params),
+      queryFn: () => demand.queryFn(supabase)(params),
     }),
 };

@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useSupabase } from '@/lib/client/supabase';
 import { theme } from '@/lib/client/theme';
 import { useI18nContext } from '@/lib/i18n/i18n-react';
 import { demand } from '@/lib/queries/demand';
@@ -86,10 +87,11 @@ export const ActualForecastDemand: React.FC<{
   to: Date;
 }> = ({ region, from, to }) => {
   const { LL } = useI18nContext();
+  const supabase = useSupabase();
   const demands = useQueries({
     queries: (['actual', 'forecast'] as const).map((type) => ({
       queryKey: demand.queryKey({ type, region, from, to }),
-      queryFn: () => demand.queryFn({ type, region, from, to }),
+      queryFn: () => demand.queryFn(supabase)({ type, region, from, to }),
     })),
     combine: (results) => ({
       data: results.flatMap(

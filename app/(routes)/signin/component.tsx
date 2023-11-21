@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
-import { createSupabase } from '@/lib/client/supabase';
+import { useSupabase } from '@/lib/client/supabase';
 import { useI18nContext } from '@/lib/i18n/i18n-react';
 import { cn } from '@/lib/utils';
 
@@ -58,7 +58,7 @@ export const LoginForm: React.FC = () => {
 };
 
 export const SocialLoginButton: React.FC<ComponentProps<typeof Button>> = (props) => {
-  const supabase = createSupabase();
+  const supabase = useSupabase();
   const { LL } = useI18nContext();
 
   return (
@@ -84,7 +84,7 @@ const formSchema = z.object({
 });
 
 export const EmailLoginForm: React.FC = () => {
-  const supabase = createSupabase();
+  const supabase = useSupabase();
   const { toast } = useToast();
   const { LL } = useI18nContext();
   const form = useForm<z.infer<typeof formSchema>>({ resolver: zodResolver(formSchema) });

@@ -52,6 +52,103 @@ type RootTranslation = {
 		 */
 		failedMagicLink: RequiredParams<'email'>
 	}
+	alert: {
+		newAlertForm: {
+			/**
+			 * B​y​ ​c​r​e​a​t​i​n​g​ ​a​ ​n​e​w​ ​a​l​e​r​t​,​ ​y​o​u​ ​w​i​l​l​ ​r​e​c​e​i​v​e​ ​n​o​t​i​f​i​c​a​t​i​o​n​ ​o​n​c​e​ ​t​h​e​ ​s​p​e​c​i​f​i​e​d​ ​c​o​n​d​i​t​i​o​n​ ​w​a​s​ ​t​r​i​g​g​e​r​e​d​.
+			 */
+			subtitle: string
+			name: {
+				/**
+				 * N​a​m​e
+				 */
+				label: string
+				/**
+				 * N​a​m​e​ ​o​f​ ​t​h​e​ ​a​l​e​r​t
+				 */
+				description: string
+			}
+			description: {
+				/**
+				 * D​e​s​c​r​i​p​t​i​o​n
+				 */
+				label: string
+				/**
+				 * D​e​s​c​r​i​p​t​i​o​n​ ​o​f​ ​t​h​e​ ​a​l​e​r​t
+				 */
+				description: string
+			}
+			threshold: {
+				/**
+				 * T​h​r​e​s​h​o​l​d
+				 */
+				label: string
+				/**
+				 * D​e​s​i​r​e​d​ ​t​h​r​e​s​h​o​l​d​ ​(​u​s​e​ ​i​n​ ​c​o​m​b​i​n​a​t​i​o​n​ ​w​i​t​h​ ​c​o​m​p​a​r​a​t​o​r​)
+				 */
+				description: string
+			}
+			comparator: {
+				/**
+				 * C​o​m​p​a​r​a​t​o​r
+				 */
+				label: string
+				/**
+				 * T​o​ ​c​o​m​p​a​r​e​ ​t​h​e​ ​t​h​r​e​s​h​o​l​d​ ​w​i​t​h​ ​t​h​e​ ​c​u​r​r​e​n​t​ ​v​a​l​u​e
+				 */
+				description: string
+			}
+			alertType: {
+				/**
+				 * A​l​e​r​t​ ​t​y​p​e
+				 */
+				label: string
+				/**
+				 * T​y​p​e​ ​o​f​ ​a​l​e​r​t
+				 */
+				description: string
+			}
+			message: {
+				/**
+				 * M​e​s​s​a​g​e
+				 */
+				label: string
+				/**
+				 * M​e​s​s​a​g​e​ ​t​o​ ​b​e​ ​s​e​n​t​ ​w​h​e​n​ ​t​h​e​ ​a​l​e​r​t​ ​i​s​ ​t​r​i​g​g​e​r​e​d
+				 */
+				description: string
+			}
+		}
+		/**
+		 * T​h​i​s​ ​a​l​e​r​t​ ​i​s​ ​{​n​a​m​e​}
+		 * @param {string} name
+		 */
+		thisAlertIs: RequiredParams<'name'>
+		/**
+		 * A​l​e​r​t
+		 */
+		alert: string
+		/**
+		 * A​c​t​i​v​e
+		 */
+		active: string
+		/**
+		 * D​i​s​a​b​l​e​d
+		 */
+		disabled: string
+	}
+	/**
+	 * O​p​t​i​o​n​a​l
+	 */
+	optional: string
+	/**
+	 * N​e​w
+	 */
+	'new': string
+	/**
+	 * S​a​v​e
+	 */
+	save: string
 	/**
 	 * L​o​a​d​i​n​g​ ​{​n​a​m​e​}​.​.​.
 	 * @param {string} name
@@ -108,6 +205,102 @@ export type TranslationFunctions = {
 		 */
 		failedMagicLink: (arg: { email: string }) => LocalizedString
 	}
+	alert: {
+		newAlertForm: {
+			/**
+			 * By creating a new alert, you will receive notification once the specified condition was triggered.
+			 */
+			subtitle: () => LocalizedString
+			name: {
+				/**
+				 * Name
+				 */
+				label: () => LocalizedString
+				/**
+				 * Name of the alert
+				 */
+				description: () => LocalizedString
+			}
+			description: {
+				/**
+				 * Description
+				 */
+				label: () => LocalizedString
+				/**
+				 * Description of the alert
+				 */
+				description: () => LocalizedString
+			}
+			threshold: {
+				/**
+				 * Threshold
+				 */
+				label: () => LocalizedString
+				/**
+				 * Desired threshold (use in combination with comparator)
+				 */
+				description: () => LocalizedString
+			}
+			comparator: {
+				/**
+				 * Comparator
+				 */
+				label: () => LocalizedString
+				/**
+				 * To compare the threshold with the current value
+				 */
+				description: () => LocalizedString
+			}
+			alertType: {
+				/**
+				 * Alert type
+				 */
+				label: () => LocalizedString
+				/**
+				 * Type of alert
+				 */
+				description: () => LocalizedString
+			}
+			message: {
+				/**
+				 * Message
+				 */
+				label: () => LocalizedString
+				/**
+				 * Message to be sent when the alert is triggered
+				 */
+				description: () => LocalizedString
+			}
+		}
+		/**
+		 * This alert is {name}
+		 */
+		thisAlertIs: (arg: { name: string }) => LocalizedString
+		/**
+		 * Alert
+		 */
+		alert: () => LocalizedString
+		/**
+		 * Active
+		 */
+		active: () => LocalizedString
+		/**
+		 * Disabled
+		 */
+		disabled: () => LocalizedString
+	}
+	/**
+	 * Optional
+	 */
+	optional: () => LocalizedString
+	/**
+	 * New
+	 */
+	'new': () => LocalizedString
+	/**
+	 * Save
+	 */
+	save: () => LocalizedString
 	/**
 	 * Loading {name}...
 	 */

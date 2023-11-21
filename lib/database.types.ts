@@ -28,7 +28,125 @@ export interface Database {
   };
   public: {
     Tables: {
-      [_ in never]: never;
+      alert: {
+        Row: {
+          active: boolean;
+          alert_type: string;
+          comparator: Database['public']['Enums']['comparator'];
+          created_at: string;
+          description: string | null;
+          id: number;
+          message: string | null;
+          name: string | null;
+          threshold: number;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          active?: boolean;
+          alert_type: string;
+          comparator: Database['public']['Enums']['comparator'];
+          created_at?: string;
+          description?: string | null;
+          id?: number;
+          message?: string | null;
+          name?: string | null;
+          threshold: number;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          active?: boolean;
+          alert_type?: string;
+          comparator?: Database['public']['Enums']['comparator'];
+          created_at?: string;
+          description?: string | null;
+          id?: number;
+          message?: string | null;
+          name?: string | null;
+          threshold?: number;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'alert_alert_type_fkey';
+            columns: ['alert_type'];
+            referencedRelation: 'alert_type';
+            referencedColumns: ['name'];
+          },
+          {
+            foreignKeyName: 'alert_user_id_fkey';
+            columns: ['user_id'];
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      alert_type: {
+        Row: {
+          created_at: string;
+          default_comparator: Database['public']['Enums']['comparator'] | null;
+          default_threshold: number | null;
+          description: string;
+          name: string;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          default_comparator?: Database['public']['Enums']['comparator'] | null;
+          default_threshold?: number | null;
+          description: string;
+          name: string;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          default_comparator?: Database['public']['Enums']['comparator'] | null;
+          default_threshold?: number | null;
+          description?: string;
+          name?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      user_notification: {
+        Row: {
+          content: string;
+          created_at: string;
+          id: string;
+          read: boolean;
+          type: string;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          content: string;
+          created_at?: string;
+          id?: string;
+          read?: boolean;
+          type: string;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          content?: string;
+          created_at?: string;
+          id?: string;
+          read?: boolean;
+          type?: string;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'user_notification_user_id_fkey';
+            columns: ['user_id'];
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
     };
     Views: {
       [_ in never]: never;
@@ -37,7 +155,7 @@ export interface Database {
       [_ in never]: never;
     };
     Enums: {
-      [_ in never]: never;
+      comparator: 'eq' | 'neq' | 'lt' | 'lte' | 'gt' | 'gte';
     };
     CompositeTypes: {
       [_ in never]: never;
