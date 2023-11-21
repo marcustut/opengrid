@@ -1,4 +1,4 @@
-import { subMinutes } from 'date-fns';
+import { startOfDay } from 'date-fns';
 
 import { createResend } from '../_lib/resend.ts';
 import { makeErrorResponse, makeSuccessResponse } from '../_lib/response.ts';
@@ -13,6 +13,8 @@ const supabase = createSupabase({
 });
 
 Deno.serve(async () => {
+  console.log('Running actual demand alert');
+
   const { data, error } = await supabase.from('alert').select('*').eq('active', true);
   if (error) {
     console.error(error);
@@ -24,40 +26,47 @@ Deno.serve(async () => {
 
   for (const region of regions) {
     try {
-      const from = subMinutes(new Date(), 15);
+      const from = startOfDay(new Date());
       const to = new Date();
-      const demands = await smartgrid.demand({ region, type: 'actual', from, to });
+      console.log('Fetching actual demand for ', region);
+      const demands = (await smartgrid.demand({ region, type: 'actual', from, to }))?.filter(
+        (demand) => !!demand.Value,
+      );
       if (!demands) throw new Error('Failed to fetch actual demand');
       const demand = demands[demands.length - 1];
+      console.log('Current actual demand: ', demand.Value);
       for (const alert of data.filter(({ region: r }) => r === region)) {
         const { threshold, comparator, message } = alert;
         let title = '';
         switch (comparator) {
           case 'eq':
-            if (demand.value === threshold)
+            if (demand.Value === threshold)
               title = `Acutal System Demand in ${region} is equal to ${threshold}`;
             break;
           case 'neq':
-            if (demand.value !== threshold)
+            if (demand.Value !== threshold)
               title = `Acutal System Demand in ${region} is not equal to ${threshold}`;
             break;
           case 'lt':
-            if (demand.value < threshold)
+            if (demand.Value && demand.Value < threshold)
               title = `Acutal System Demand in ${region} is lesser than ${threshold}`;
             break;
           case 'lte':
-            if (demand.value <= threshold)
+            if (demand.Value && demand.Value <= threshold)
               title = `Acutal System Demand in ${region} is lesser than or equal to ${threshold}`;
             break;
           case 'gt':
-            if (demand.value > threshold)
+            if (demand.Value && demand.Value > threshold)
               title = `Acutal System Demand in ${region} is greater than ${threshold}`;
             break;
           case 'gte':
-            if (demand.value >= threshold)
+            if (demand.Value && demand.Value >= threshold)
               title = `Acutal System Demand in ${region} is greater than or equal to ${threshold}`;
             break;
         }
+        if (title === '') continue;
+
+        console.log(`Getting user ${alert.user_id} from supabase`);
         const { data, error } = await supabase.auth.admin.getUserById(alert.user_id);
         if (error) {
           console.error(error);
@@ -70,13 +79,14 @@ Deno.serve(async () => {
         }
 
         const params = {
-          from: 'notification@mail.marcustut.me',
+          from: 'notification@opengrid.marcustut.me',
           to: [data.user.email],
           subject: title,
           html: message ?? title,
         };
 
         // Insert into database
+        console.log(`Creating notification for ${alert.user_id} in database`);
         const notification = await supabase
           .from('email_notification')
           .insert({ ...params, to: params.to[0], status: 'pending' })
@@ -88,9 +98,11 @@ Deno.serve(async () => {
         }
 
         // Send email
+        console.log(`Sending email to ${params.to}`);
         await resend.sendEmail(params);
 
         // Update to success
+        console.log(`Updating email to status success`);
         const { error: updateNotificationError } = await supabase
           .from('email_notification')
           .update({ status: 'success' })
