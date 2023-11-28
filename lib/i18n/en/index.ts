@@ -51,6 +51,7 @@ const en = {
   loading: 'Loading {name:string}...',
   failedToLoad: 'Failed to load {name:string}',
   systemDemand: 'System demand',
+  windGeneration: 'Wind Generation',
   welcomeTo: 'Welcome to {name:string}',
 } satisfies BaseTranslation;
 

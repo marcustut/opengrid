@@ -51,6 +51,7 @@ const ga = {
   loading: 'Ag lódáil {name}...',
   failedToLoad: 'Theip ar luchtú {name}',
   systemDemand: 'éileamh córais',
+  windGeneration: 'giniúint Gaoithe',
   welcomeTo: 'Fáilte go {name}',
 } satisfies Translation;
 

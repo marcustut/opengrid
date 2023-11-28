@@ -164,6 +164,10 @@ type RootTranslation = {
 	 */
 	systemDemand: string
 	/**
+	 * W​i​n​d​ ​G​e​n​e​r​a​t​i​o​n
+	 */
+	windGeneration: string
+	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ ​{​n​a​m​e​}
 	 * @param {string} name
 	 */
@@ -313,6 +317,10 @@ export type TranslationFunctions = {
 	 * System demand
 	 */
 	systemDemand: () => LocalizedString
+	/**
+	 * Wind Generation
+	 */
+	windGeneration: () => LocalizedString
 	/**
 	 * Welcome to {name}
 	 */

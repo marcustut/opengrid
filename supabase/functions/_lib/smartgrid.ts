@@ -21,7 +21,7 @@ const createDashboardResponseSchema = <T extends z.ZodTypeAny>(type: T) =>
     }),
   ]);
 
-export const demandRequestSchema = z.object({
+export const requestSchema = z.object({
   type: z.enum(['actual', 'forecast']),
   region: z.enum(['ROI', 'NI', 'ALL']),
   from: z
@@ -31,13 +31,13 @@ export const demandRequestSchema = z.object({
     .union([z.string(), z.date()])
     .transform((x) => (x instanceof Date ? x : (parseISO(x) as Date))),
 });
-export const demandSchema = z.object({
+export const responseDataSchema = z.object({
   EffectiveTime: dateSchema,
-  FieldName: z.enum(['SYSTEM_DEMAND', 'DEMAND_FORECAST_VALUE']),
+  FieldName: z.enum(['SYSTEM_DEMAND', 'DEMAND_FORECAST_VALUE', 'WIND_ACTUAL', 'WIND_FCAST']),
   Region: z.enum(['ROI', 'NI', 'ALL']),
   Value: z.number().nullable(),
 });
-export const demandResponseSchema = createDashboardResponseSchema(demandSchema);
+export const responseSchema = createDashboardResponseSchema(responseDataSchema);
 
 class Client {
   private url = 'https://www.smartgriddashboard.com';
@@ -53,22 +53,30 @@ class Client {
     return format(date, DATE_PATTERN);
   }
 
-  async demand(opts: z.infer<typeof demandRequestSchema>) {
+  private async handler(opts: z.infer<typeof requestSchema>, type: 'demand' | 'wind') {
     const params = {
-      area: `demand${opts.type}`,
+      area: `${type}${opts.type}`,
       region: opts.region,
       datefrom: this.formatDate(opts.from),
       dateto: this.formatDate(opts.to),
     };
     const url = this.makeUrl('dashboard', params);
     const resp = await fetch(url, { method: 'GET', headers: { accept: 'application/json' } });
-    if (!resp.ok) throw new Error(`DashboardAPIError(demand${opts.type}): ${resp.statusText}`);
+    if (!resp.ok) throw new Error(`DashboardAPIError(${type}${opts.type}): ${resp.statusText}`);
 
-    const body = demandResponseSchema.parse(await resp.json());
+    const body = responseSchema.parse(await resp.json());
     if (body.Status === 'Error')
-      throw new Error(`DashboardAPIError(demand${opts.type}): ${body.ErrorMessage}`);
+      throw new Error(`DashboardAPIError(${type}${opts.type}): ${body.ErrorMessage}`);
 
     return body.Rows;
+  }
+
+  async demand(opts: z.infer<typeof requestSchema>) {
+    return await this.handler(opts, 'demand');
+  }
+
+  async wind(opts: z.infer<typeof requestSchema>) {
+    return await this.handler(opts, 'wind');
   }
 }
 

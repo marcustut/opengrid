@@ -7,7 +7,7 @@ import type { Response } from '@/supabase/functions/_lib/response';
 import type { requestSchema } from '@/supabase/functions/_lib/smartgrid';
 import { responseDataSchema } from '@/supabase/functions/_lib/smartgrid';
 
-const fetchDemand = (supabase: Supabase) => async (params: z.infer<typeof requestSchema>) => {
+const fetchWind = (supabase: Supabase) => async (params: z.infer<typeof requestSchema>) => {
   const { data, error } = await supabase.functions.invoke<
     Response<z.infer<typeof responseDataSchema>>
   >('smartgrid', {
@@ -15,7 +15,7 @@ const fetchDemand = (supabase: Supabase) => async (params: z.infer<typeof reques
       ...params,
       from: formatRFC3339(params.from),
       to: formatRFC3339(params.to),
-      _type: 'demand',
+      _type: 'wind',
     },
   });
   if (error || !data) throw error instanceof Error ? error : new Error(`${error}`);
@@ -27,15 +27,15 @@ const fetchDemand = (supabase: Supabase) => async (params: z.infer<typeof reques
     .parse(data.data);
 };
 
-export const demand = {
+export const wind = {
   queryKey: (params: z.infer<typeof requestSchema>) => [
-    'demand',
+    'wind',
     ...Object.entries(params).map(([k, v]) => `${k}=${v instanceof Date ? formatRFC3339(v) : v}`),
   ],
-  queryFn: fetchDemand,
+  queryFn: fetchWind,
   useQuery: (supabase: Supabase) => (params: z.infer<typeof requestSchema>) =>
     useQuery({
-      queryKey: demand.queryKey(params),
-      queryFn: () => demand.queryFn(supabase)(params),
+      queryKey: wind.queryKey(params),
+      queryFn: () => wind.queryFn(supabase)(params),
     }),
 };
