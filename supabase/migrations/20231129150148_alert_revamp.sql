@@ -34,7 +34,7 @@ begin
 
     return new;
 end;
-$$
+$$;
 
 create or replace trigger "create_default_alerts_for_new_user"
 before update
