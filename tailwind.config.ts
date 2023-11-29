@@ -20,6 +20,7 @@ export default {
     extend: {
       colors: {
         stone: colors.stone,
+        amber: colors.amber,
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

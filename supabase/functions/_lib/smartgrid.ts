@@ -5,22 +5,6 @@ const DATE_PATTERN = 'dd-MMM-yyyy HH:mm:ss';
 
 const dateSchema = z.string().transform((x) => parse(x, DATE_PATTERN, new Date()));
 
-const createDashboardResponseSchema = <T extends z.ZodTypeAny>(type: T) =>
-  z.discriminatedUnion('Status', [
-    z.object({
-      ErrorMessage: z.null(),
-      LastUpdated: dateSchema,
-      Rows: z.array(type),
-      Status: z.literal('Success'),
-    }),
-    z.object({
-      ErrorMessage: z.string(),
-      LastUpdated: z.null(),
-      Rows: z.array(type),
-      Status: z.literal('Error'),
-    }),
-  ]);
-
 export const requestSchema = z.object({
   type: z.enum(['actual', 'forecast']),
   region: z.enum(['ROI', 'NI', 'ALL']),
@@ -37,7 +21,20 @@ export const responseDataSchema = z.object({
   Region: z.enum(['ROI', 'NI', 'ALL']),
   Value: z.number().nullable(),
 });
-export const responseSchema = createDashboardResponseSchema(responseDataSchema);
+export const responseSchema = z.discriminatedUnion('Status', [
+  z.object({
+    ErrorMessage: z.null(),
+    LastUpdated: dateSchema,
+    Rows: z.array(responseDataSchema),
+    Status: z.literal('Success'),
+  }),
+  z.object({
+    ErrorMessage: z.string(),
+    LastUpdated: z.null(),
+    Rows: z.array(responseDataSchema),
+    Status: z.literal('Error'),
+  }),
+]);
 
 class Client {
   private url = 'https://www.smartgriddashboard.com';

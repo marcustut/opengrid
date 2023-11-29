@@ -1,9 +1,25 @@
-import { startOfDay } from 'date-fns';
+import {
+  addDays,
+  endOfDay,
+  format,
+  formatRFC3339,
+  isEqual,
+  isToday,
+  startOfDay,
+  subDays,
+  subMinutes,
+} from 'date-fns';
+import type { z } from 'zod';
 
+import aggregator from '../_lib/aggregate.ts';
+import { createNotification } from '../_lib/notification.ts';
 import { createResend } from '../_lib/resend.ts';
 import { makeErrorResponse, makeSuccessResponse } from '../_lib/response.ts';
+import type { responseDataSchema } from '../_lib/smartgrid.ts';
 import { createSmartGrid } from '../_lib/smartgrid.ts';
 import { createSupabase } from '../_lib/supabase.ts';
+
+type SmartGridResponse = z.infer<typeof responseDataSchema>[];
 
 const smartgrid = createSmartGrid();
 const resend = createResend(Deno.env.get('RESEND_API_KEY')!);
@@ -11,11 +27,54 @@ const supabase = createSupabase({
   url: Deno.env.get('SUPABASE_URL')!,
   key: Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
 });
+const notification = createNotification({ from: Deno.env.get('RESEND_FROM')!, resend, supabase });
+
+const constructHtml = (
+  aboveDateRange: { from: Date; to: Date }[],
+  belowDateRange: { from: Date; to: Date }[],
+  message?: string | null,
+) => {
+  return `<!DOCTYPE html>
+  <html>
+  The forecasted time are as follows: <br /><br />
+  
+  ${
+    belowDateRange.length > 0
+      ? `<strong>Low-demand period:</strong><br />
+        <ul>
+            ${belowDateRange.map(
+              ({ from, to }) => `<li>${formatRFC3339(from)} - ${formatRFC3339(to)}</li>`,
+            )}
+        </ul>`
+      : 'No low-demand period today'
+  }
+  
+  ${
+    aboveDateRange.length > 0
+      ? `<strong>High-demand period:</strong><br />
+        <ul>
+            ${aboveDateRange.map(
+              ({ from, to }) => `<li>${formatRFC3339(from)} - ${formatRFC3339(to)}</li>`,
+            )}
+        </ul>`
+      : 'No high-demand period today'
+  }
+
+  ${message ? `You custom message: ${message}` : ''}
+  
+  <br />
+  <em>It is encouraged to use more electricity during the <strong>low-demand period</strong> to save electricity cost.</em>
+  </html>`;
+};
 
 Deno.serve(async () => {
-  console.log('Running actual demand alert');
+  console.log('Running daily alert');
 
-  const { data, error } = await supabase.from('alert').select('*').eq('active', true);
+  const { data, error } = await supabase
+    .from('alert')
+    .select('*')
+    .eq('active', true)
+    .eq('alert_type', 'daily');
   if (error) {
     console.error(error);
     console.error('Exiting due to error');
@@ -26,46 +85,58 @@ Deno.serve(async () => {
 
   for (const region of regions) {
     try {
-      const from = startOfDay(new Date());
-      const to = new Date();
-      console.log('Fetching actual demand for ', region);
-      const demands = (await smartgrid.demand({ region, type: 'actual', from, to }))?.filter(
-        (demand) => !!demand.Value,
+      const from = startOfDay(subDays(new Date(), 7));
+      const to = endOfDay(addDays(new Date(), 7));
+      console.log(
+        `Fetching net demand from ${formatRFC3339(from)} to ${formatRFC3339(to)} for `,
+        region,
       );
-      if (!demands) throw new Error('Failed to fetch actual demand');
-      const demand = demands[demands.length - 1];
-      console.log('Current actual demand: ', demand.Value);
-      for (const alert of data.filter(({ region: r }) => r === region)) {
-        const { threshold, comparator, message } = alert;
-        let title = '';
-        switch (comparator) {
-          case 'eq':
-            if (demand.Value === threshold)
-              title = `Acutal System Demand in ${region} is equal to ${threshold}`;
-            break;
-          case 'neq':
-            if (demand.Value !== threshold)
-              title = `Acutal System Demand in ${region} is not equal to ${threshold}`;
-            break;
-          case 'lt':
-            if (demand.Value && demand.Value < threshold)
-              title = `Acutal System Demand in ${region} is lesser than ${threshold}`;
-            break;
-          case 'lte':
-            if (demand.Value && demand.Value <= threshold)
-              title = `Acutal System Demand in ${region} is lesser than or equal to ${threshold}`;
-            break;
-          case 'gt':
-            if (demand.Value && demand.Value > threshold)
-              title = `Acutal System Demand in ${region} is greater than ${threshold}`;
-            break;
-          case 'gte':
-            if (demand.Value && demand.Value >= threshold)
-              title = `Acutal System Demand in ${region} is greater than or equal to ${threshold}`;
-            break;
-        }
-        if (title === '') continue;
 
+      const constructParams = (type: 'actual' | 'forecast') => ({ region, type, from, to });
+      const demandActual = (await smartgrid.demand(constructParams('actual'))) as SmartGridResponse;
+      const demandForecast = (await smartgrid.demand(
+        constructParams('forecast'),
+      )) as SmartGridResponse;
+      let demands = [] as SmartGridResponse;
+      if (demandForecast.every((x) => !x.Value)) {
+        console.error(`EirGrid is returning null for forecasted values, using actual values`);
+        demands = demandActual;
+      } else demands = demandForecast;
+
+      const averageNetDemand = aggregator.average(
+        aggregator
+          .netDemand({
+            demand: { actual: demandActual, forecast: demandForecast },
+            wind: {
+              actual: (await smartgrid.wind(constructParams('actual'))) as SmartGridResponse,
+              forecast: (await smartgrid.wind(constructParams('forecast'))) as SmartGridResponse,
+            },
+          })
+          .map(({ value }) => value),
+      );
+      console.log(`The average net demand is `, averageNetDemand);
+
+      const aboveTimeframe: Date[] = [];
+      const belowTimeframe: Date[] = [];
+
+      demands
+        .filter((x) => isToday(x.EffectiveTime))
+        .forEach((x) => {
+          if (!x.Value) return;
+          if (x.Value >= averageNetDemand) aboveTimeframe.push(x.EffectiveTime);
+          else belowTimeframe.push(x.EffectiveTime);
+        });
+
+      const aboveDateRange = aggregator.toDateRange(aboveTimeframe, (a, b) =>
+        isEqual(subMinutes(b, 15), a),
+      );
+      const belowDateRange = aggregator.toDateRange(belowTimeframe, (a, b) =>
+        isEqual(subMinutes(b, 15), a),
+      );
+      console.log('aboveDateRange', aboveDateRange);
+      console.log('belowDateRange', belowDateRange);
+
+      for (const alert of data.filter(({ region: r }) => r === region)) {
         console.log(`Getting user ${alert.user_id} from supabase`);
         const { data, error } = await supabase.auth.admin.getUserById(alert.user_id);
         if (error) {
@@ -78,44 +149,15 @@ Deno.serve(async () => {
           continue;
         }
 
-        const params = {
-          from: 'notification@opengrid.marcustut.me',
-          to: [data.user.email],
-          subject: title,
-          html: message ?? title,
-        };
-
-        // Insert into database
-        console.log(`Creating notification for ${alert.user_id} in database`);
-        const notification = await supabase
-          .from('email_notification')
-          .insert({ ...params, to: params.to[0], status: 'pending' })
-          .select('id');
-        if (notification.error || notification.data.length === 0) {
-          console.error(error);
-          console.error('Skipping due to failed to insert notification');
-          continue;
-        }
-
-        // Send email
-        console.log(`Sending email to ${params.to}`);
-        await resend.sendEmail(params);
-
-        // Update to success
-        console.log(`Updating email to status success`);
-        const { error: updateNotificationError } = await supabase
-          .from('email_notification')
-          .update({ status: 'success' })
-          .eq('id', notification.data[0].id);
-        if (updateNotificationError) {
-          console.error(error);
-          console.error('Skipping due to failed to update notification');
-          continue;
-        }
+        await notification.sendEmail({
+          to: data.user.email,
+          subject: `SmartGrid Electricity Reminder for ${format(new Date(), 'dd/MM/yyyy')}`,
+          html: constructHtml(aboveDateRange, belowDateRange, alert.message),
+        });
       }
     } catch (err) {
       console.error(err);
-      console.error('Exiting due to failed to fetch actual demand');
+      console.error('Exiting due to failed to fetch daily');
       return makeErrorResponse(err);
     }
   }

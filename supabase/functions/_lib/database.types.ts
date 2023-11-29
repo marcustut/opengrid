@@ -190,6 +190,24 @@ export interface Database {
           }
         ]
       }
+      realtime_system_demand: {
+        Row: {
+          created_at: string
+          event_time: string
+          value: number
+        }
+        Insert: {
+          created_at?: string
+          event_time: string
+          value: number
+        }
+        Update: {
+          created_at?: string
+          event_time?: string
+          value?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

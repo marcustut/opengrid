@@ -127,6 +127,9 @@ const ChartCard: React.FC<ChartCardProps> = ({ title, description, className, ch
   );
 };
 
+const calculateAverage = (arr: number[]) =>
+  arr.length ? arr.reduce((acc, x) => acc + x, 0) / arr.length : 0;
+
 const ActualForecastNetDemand: React.FC<ChartProps> = ({ region, from, to }) => {
   const { LL } = useI18nContext();
   const supabase = useSupabase();
@@ -186,6 +189,15 @@ const ActualForecastNetDemand: React.FC<ChartProps> = ({ region, from, to }) => 
             actual: demand.actual ? demand.actual - (wind.actual ?? 0) : null,
             forecast: demandForecast ? demandForecast - (wind.forecast ?? 0) : null,
           };
+        })
+        .map((a, i, arr) => {
+          return {
+            ...a,
+            actualAverage: calculateAverage(
+              arr.map(({ actual }) => actual).filter((x) => !!x) as number[],
+            ),
+            actualForecast: null,
+          };
         }),
       error: results.find(({ error }) => error)?.error ?? null,
       status: results.some(({ status }) => status === 'pending')
@@ -196,15 +208,14 @@ const ActualForecastNetDemand: React.FC<ChartProps> = ({ region, from, to }) => 
     }),
   });
 
+  console.log(generations.data);
+
   if (generations.status === 'error')
     return (
-      <Error
-        title={LL.failedToLoad({ name: LL.windGeneration() })}
-        description={generations.error?.message}
-      />
+      <Error title={LL.failedToLoad({ name: 'data' })} description={generations.error?.message} />
     );
   if (generations.status === 'pending')
-    return <Loading description={LL.loading({ name: LL.windGeneration() })} />;
+    return <Loading description={LL.loading({ name: 'data' })} />;
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -224,6 +235,12 @@ const ActualForecastNetDemand: React.FC<ChartProps> = ({ region, from, to }) => 
                     {data.actual && <span className="font-bold">{data.actual} MW (Actual)</span>}
                     {data.forecast && (
                       <span className="font-bold">{data.forecast} MW (Forecast)</span>
+                    )}
+                    {data.actualAverage && (
+                      <span className="font-bold">{data.actualAverage} MW (Average Actual)</span>
+                    )}
+                    {data.actualForecast && (
+                      <span className="font-bold">{data.actualForecast} MW (Forecast Actual)</span>
                     )}
                   </div>
                 </div>
@@ -246,6 +263,22 @@ const ActualForecastNetDemand: React.FC<ChartProps> = ({ region, from, to }) => 
           dot={false}
           activeDot={{ r: 6, style: { fill: 'hsl(var(--primary))' } }}
           style={{ stroke: theme.colors.primary.foreground }}
+        />
+        <Line
+          type="monotone"
+          strokeWidth={2}
+          dataKey="actualAverage"
+          dot={false}
+          activeDot={{ r: 6, style: { fill: theme.colors.amber[600] } }}
+          style={{ stroke: theme.colors.amber[600] }}
+        />
+        <Line
+          type="monotone"
+          strokeWidth={2}
+          dataKey="actualForecast"
+          dot={false}
+          activeDot={{ r: 6, style: { fill: theme.colors.amber[900] } }}
+          style={{ stroke: theme.colors.amber[900] }}
         />
       </LineChart>
     </ResponsiveContainer>
