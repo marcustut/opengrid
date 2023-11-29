@@ -38,42 +38,36 @@ export interface Database {
         Row: {
           active: boolean
           alert_type: string
-          comparator: Database["public"]["Enums"]["comparator"]
           created_at: string
-          description: string | null
           id: number
           message: string | null
-          name: string | null
+          phone_numbers: string[]
           region: Database["public"]["Enums"]["region"]
-          threshold: number
+          send_email: boolean
           updated_at: string
           user_id: string
         }
         Insert: {
           active?: boolean
           alert_type: string
-          comparator: Database["public"]["Enums"]["comparator"]
           created_at?: string
-          description?: string | null
           id?: number
           message?: string | null
-          name?: string | null
+          phone_numbers?: string[]
           region?: Database["public"]["Enums"]["region"]
-          threshold: number
+          send_email?: boolean
           updated_at?: string
           user_id: string
         }
         Update: {
           active?: boolean
           alert_type?: string
-          comparator?: Database["public"]["Enums"]["comparator"]
           created_at?: string
-          description?: string | null
           id?: number
           message?: string | null
-          name?: string | null
+          phone_numbers?: string[]
           region?: Database["public"]["Enums"]["region"]
-          threshold?: number
+          send_email?: boolean
           updated_at?: string
           user_id?: string
         }
@@ -95,24 +89,18 @@ export interface Database {
       alert_type: {
         Row: {
           created_at: string
-          default_comparator: Database["public"]["Enums"]["comparator"] | null
-          default_threshold: number | null
           description: string
           name: string
           updated_at: string
         }
         Insert: {
           created_at?: string
-          default_comparator?: Database["public"]["Enums"]["comparator"] | null
-          default_threshold?: number | null
           description: string
           name: string
           updated_at?: string
         }
         Update: {
           created_at?: string
-          default_comparator?: Database["public"]["Enums"]["comparator"] | null
-          default_threshold?: number | null
           description?: string
           name?: string
           updated_at?: string
