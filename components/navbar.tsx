@@ -1,5 +1,6 @@
 'use client';
 
+import { BellIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { type DetailedHTMLProps, type HTMLAttributes, useMemo } from 'react';
@@ -86,6 +87,12 @@ export const Navbar: React.FC<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTM
             timeZoneName: 'short',
           }).format(time)}
         </span>
+        <Link href="/alert" className="sm:hidden">
+          <Button variant="outline" size="icon">
+            <BellIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all" />
+            <span className="sr-only">Alert</span>
+          </Button>
+        </Link>
         <LocaleToggler />
         <ThemeToggler />
         {session.error ? (
