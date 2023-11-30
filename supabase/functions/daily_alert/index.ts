@@ -37,6 +37,12 @@ const constructHtml = (
   return `<!DOCTYPE html>
   <html>
   The forecasted time are as follows: <br /><br />
+
+  ${
+    belowDateRange.length === 0 && aboveDateRange.length === 0
+      ? 'The electricity demand remains the same for the entire day, no high-demand and low-demand period'
+      : ''
+  }
   
   ${
     belowDateRange.length > 0

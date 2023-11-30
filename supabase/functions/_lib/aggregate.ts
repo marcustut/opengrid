@@ -65,7 +65,7 @@ const average = (arr: number[]) =>
   arr.length > 0 ? arr.reduce((acc, x) => acc + x, 0) / arr.length : 0;
 
 const toDateRange = (arr: Date[], predicate: (x: Date, y: Date) => boolean) => {
-  if (arr.length < 2) throw new Error('toDateRange must have at least 2 dates');
+  if (arr.length < 2) return [];
 
   const ret: { from: Date; to: Date }[] = [];
 
