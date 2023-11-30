@@ -3,8 +3,6 @@ import { Inter } from 'next/font/google';
 
 import '@/app/globals.css';
 import { ClientProvider } from '@/components/provider';
-import { detectLocale } from '@/lib/i18n/i18n-util';
-import { loadFormatters, loadLocaleAsync } from '@/lib/i18n/i18n-util.async';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -54,14 +52,10 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const locale = detectLocale();
-  await loadLocaleAsync(locale);
-  loadFormatters(locale);
-
   return (
-    <html lang={locale}>
+    <html lang="en">
       <body className={`${inter.className}`}>
-        <ClientProvider locale={locale}>{children}</ClientProvider>
+        <ClientProvider>{children}</ClientProvider>
       </body>
     </html>
   );

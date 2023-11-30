@@ -10,14 +10,12 @@ import { Navbar } from '@/components/navbar';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import TypesafeI18n from '@/lib/i18n/i18n-react';
-import type { Locales } from '@/lib/i18n/i18n-types';
+import { detectLocale } from '@/lib/i18n/i18n-util';
 import { loadLocaleAsync } from '@/lib/i18n/i18n-util.async';
 import { cn } from '@/lib/utils';
 
-export const ClientProvider: React.FC<{ children: React.ReactNode; locale: Locales }> = ({
-  children,
-  locale,
-}) => {
+export const ClientProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [locale] = useState(detectLocale());
   const [localeLoaded, setLocaleLoaded] = useState(false);
 
   useEffect(() => {
