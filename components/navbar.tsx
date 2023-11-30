@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import type { DetailedHTMLProps, HTMLAttributes } from 'react';
+import { type DetailedHTMLProps, type HTMLAttributes, useMemo } from 'react';
 
 import { DashboardDots } from '@/components/icons/dashboard-dots';
 import { GridOutline } from '@/components/icons/grid-outline';
@@ -17,15 +17,6 @@ import { useI18nContext } from '@/lib/i18n/i18n-react';
 import { useSession } from '@/lib/queries/session';
 import { cn } from '@/lib/utils';
 
-const paths = [
-  { name: 'Dashboard', path: '/', icon: <DashboardDots className="w-[18px] h-[18px]" /> },
-  {
-    name: 'Alert',
-    path: '/alert',
-    icon: <NotificationBell className="w-[18px] h-[18px]" />,
-  },
-];
-
 export const Navbar: React.FC<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>> = (
   props,
 ) => {
@@ -34,7 +25,23 @@ export const Navbar: React.FC<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTM
   const session = useSession();
   const { replace } = useRouter();
   const time = useTimer(SECOND);
-  const { LL } = useI18nContext();
+  const { LL, locale } = useI18nContext();
+
+  const paths = useMemo(
+    () => [
+      {
+        name: LL.path.dashboard(),
+        path: '/',
+        icon: <DashboardDots className="w-[18px] h-[18px]" />,
+      },
+      {
+        name: LL.path.alert(),
+        path: '/alert',
+        icon: <NotificationBell className="w-[18px] h-[18px]" />,
+      },
+    ],
+    [locale],
+  );
 
   return (
     <nav

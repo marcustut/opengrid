@@ -2,6 +2,7 @@
 
 import { useQueries } from '@tanstack/react-query';
 import { format, isEqual, startOfToday, startOfTomorrow } from 'date-fns';
+import { startCase } from 'lodash';
 import { type ReactNode, useState } from 'react';
 import { Line, LineChart, ResponsiveContainer, Tooltip } from 'recharts';
 
@@ -26,44 +27,53 @@ import { demand } from '@/lib/queries/demand';
 import { wind } from '@/lib/queries/wind';
 import { cn } from '@/lib/utils';
 
-export const NetDemandChart: React.FC<{ className?: string }> = ({ className }) => (
-  <ChartCard
-    title="Net Demand"
-    description="Net demand represents the electricity production by taking the actual and forecast system demand and deduct them with the current wind generation."
-    className={className}
-    chart={({ region, from, to }) => (
-      <div className={cn('h-[400px] flex justify-center items-center')}>
-        <ActualForecastNetDemand region={region} from={from} to={to} />
-      </div>
-    )}
-  />
-);
+export const NetDemandChart: React.FC<{ className?: string }> = ({ className }) => {
+  const { LL } = useI18nContext();
+  return (
+    <ChartCard
+      title={startCase(LL.netDemand())}
+      description={LL.netDemandDescription()}
+      className={className}
+      chart={({ region, from, to }) => (
+        <div className={cn('h-[400px] flex justify-center items-center')}>
+          <ActualForecastNetDemand region={region} from={from} to={to} />
+        </div>
+      )}
+    />
+  );
+};
 
-export const SystemDemandChart: React.FC<{ className?: string }> = ({ className }) => (
-  <ChartCard
-    title="System Demand"
-    description="System demand represents the electricity production required to meet national consumption. Actual and forecast System Demand are shown in 15 minute intervals."
-    className={className}
-    chart={({ region, from, to }) => (
-      <div className={cn('h-[400px] flex justify-center items-center')}>
-        <ActualForecastSystemDemand region={region} from={from} to={to} />
-      </div>
-    )}
-  />
-);
+export const SystemDemandChart: React.FC<{ className?: string }> = ({ className }) => {
+  const { LL } = useI18nContext();
+  return (
+    <ChartCard
+      title={startCase(LL.systemDemand())}
+      description={LL.systemDemandDescription()}
+      className={className}
+      chart={({ region, from, to }) => (
+        <div className={cn('h-[400px] flex justify-center items-center')}>
+          <ActualForecastSystemDemand region={region} from={from} to={to} />
+        </div>
+      )}
+    />
+  );
+};
 
-export const WindGenerationChart: React.FC<{ className?: string }> = ({ className }) => (
-  <ChartCard
-    title="Wind Generation"
-    description="Wind Generation is an estimate of the total electrical output of all wind farms on the system. Actual and Forecast Wind Generation are shown in 15 minute intervals."
-    className={className}
-    chart={({ region, from, to }) => (
-      <div className={cn('h-[400px] flex justify-center items-center')}>
-        <ActualForecastWindGeneration region={region} from={from} to={to} />
-      </div>
-    )}
-  />
-);
+export const WindGenerationChart: React.FC<{ className?: string }> = ({ className }) => {
+  const { LL } = useI18nContext();
+  return (
+    <ChartCard
+      title={startCase(LL.windGeneration())}
+      description={LL.windGenerationDescription()}
+      className={className}
+      chart={({ region, from, to }) => (
+        <div className={cn('h-[400px] flex justify-center items-center')}>
+          <ActualForecastWindGeneration region={region} from={from} to={to} />
+        </div>
+      )}
+    />
+  );
+};
 
 type ChartProps = {
   region: 'ROI' | 'NI' | 'ALL';
@@ -78,6 +88,7 @@ type ChartCardProps = {
 };
 
 const ChartCard: React.FC<ChartCardProps> = ({ title, description, className, chart }) => {
+  const { LL } = useI18nContext();
   const [region, setRegion] = useState<'ROI' | 'NI' | 'ALL'>('ALL');
   const [from, setFrom] = useState(startOfToday());
   const [to] = useState(startOfTomorrow());
@@ -93,7 +104,7 @@ const ChartCard: React.FC<ChartCardProps> = ({ title, description, className, ch
           <div className="flex space-x-2 items-center">
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="outline">Choose date</Button>
+                <Button variant="outline">{LL.chooseDate()}</Button>
               </PopoverTrigger>
               <PopoverContent>
                 <Calendar
@@ -111,9 +122,9 @@ const ChartCard: React.FC<ChartCardProps> = ({ title, description, className, ch
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="ROI">Republic of Ireland</SelectItem>
-                <SelectItem value="NI">Northern Ireland</SelectItem>
-                <SelectItem value="ALL">All Island</SelectItem>
+                <SelectItem value="ROI">{LL.region.republicOfIreland()}</SelectItem>
+                <SelectItem value="NI">{LL.region.northernIreland()}</SelectItem>
+                <SelectItem value="ALL">{LL.region.allIreland()}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -208,8 +219,6 @@ const ActualForecastNetDemand: React.FC<ChartProps> = ({ region, from, to }) => 
     }),
   });
 
-  console.log(generations.data);
-
   if (generations.status === 'error')
     return (
       <Error title={LL.failedToLoad({ name: 'data' })} description={generations.error?.message} />
@@ -232,15 +241,20 @@ const ActualForecastNetDemand: React.FC<ChartProps> = ({ region, from, to }) => 
                     <span className="text-xs uppercase text-muted-foreground">
                       {format(data.timestamp, 'dd MMMM yyyy p')}
                     </span>
-                    {data.actual && <span className="font-bold">{data.actual} MW (Actual)</span>}
+                    {data.actual && (
+                      <span className="font-bold">
+                        {data.actual} MW ({LL.actual()})
+                      </span>
+                    )}
                     {data.forecast && (
-                      <span className="font-bold">{data.forecast} MW (Forecast)</span>
+                      <span className="font-bold">
+                        {data.forecast} MW ({LL.forecast()})
+                      </span>
                     )}
                     {data.actualAverage && (
-                      <span className="font-bold">{data.actualAverage} MW (Average Actual)</span>
-                    )}
-                    {data.actualForecast && (
-                      <span className="font-bold">{data.actualForecast} MW (Forecast Actual)</span>
+                      <span className="font-bold">
+                        {data.actualAverage.toFixed(0)} MW ({LL.average()})
+                      </span>
                     )}
                   </div>
                 </div>
@@ -340,7 +354,7 @@ const ActualForecastSystemDemand: React.FC<ChartProps> = ({ region, from, to }) 
                     </span>
                     <span className="font-bold">
                       {payload[0].value} MW (
-                      {`${payload[0].dataKey === 'actual' ? 'Actual' : 'Forecast'}`})
+                      {`${payload[0].dataKey === 'actual' ? LL.actual() : LL.forecast()}`})
                     </span>
                   </div>
                 </div>
@@ -436,9 +450,15 @@ const ActualForecastWindGeneration: React.FC<ChartProps> = ({ region, from, to }
                     <span className="text-xs uppercase text-muted-foreground">
                       {format(data.timestamp, 'dd MMMM yyyy p')}
                     </span>
-                    {data.actual && <span className="font-bold">{data.actual} MW (Actual)</span>}
+                    {data.actual && (
+                      <span className="font-bold">
+                        {data.actual} MW ({LL.actual()})
+                      </span>
+                    )}
                     {data.forecast && (
-                      <span className="font-bold">{data.forecast} MW (Forecast)</span>
+                      <span className="font-bold">
+                        {data.forecast} MW ({LL.forecast()})
+                      </span>
                     )}
                   </div>
                 </div>

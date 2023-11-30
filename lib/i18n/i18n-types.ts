@@ -53,72 +53,35 @@ type RootTranslation = {
 		failedMagicLink: RequiredParams<'email'>
 	}
 	alert: {
-		newAlertForm: {
-			/**
-			 * B​y​ ​c​r​e​a​t​i​n​g​ ​a​ ​n​e​w​ ​a​l​e​r​t​,​ ​y​o​u​ ​w​i​l​l​ ​r​e​c​e​i​v​e​ ​n​o​t​i​f​i​c​a​t​i​o​n​ ​o​n​c​e​ ​t​h​e​ ​s​p​e​c​i​f​i​e​d​ ​c​o​n​d​i​t​i​o​n​ ​w​a​s​ ​t​r​i​g​g​e​r​e​d​.
-			 */
-			subtitle: string
-			name: {
-				/**
-				 * N​a​m​e
-				 */
-				label: string
-				/**
-				 * N​a​m​e​ ​o​f​ ​t​h​e​ ​a​l​e​r​t
-				 */
-				description: string
-			}
-			description: {
-				/**
-				 * D​e​s​c​r​i​p​t​i​o​n
-				 */
-				label: string
-				/**
-				 * D​e​s​c​r​i​p​t​i​o​n​ ​o​f​ ​t​h​e​ ​a​l​e​r​t
-				 */
-				description: string
-			}
-			threshold: {
-				/**
-				 * T​h​r​e​s​h​o​l​d
-				 */
-				label: string
-				/**
-				 * D​e​s​i​r​e​d​ ​t​h​r​e​s​h​o​l​d​ ​(​u​s​e​ ​i​n​ ​c​o​m​b​i​n​a​t​i​o​n​ ​w​i​t​h​ ​c​o​m​p​a​r​a​t​o​r​)
-				 */
-				description: string
-			}
-			comparator: {
-				/**
-				 * C​o​m​p​a​r​a​t​o​r
-				 */
-				label: string
-				/**
-				 * T​o​ ​c​o​m​p​a​r​e​ ​t​h​e​ ​t​h​r​e​s​h​o​l​d​ ​w​i​t​h​ ​t​h​e​ ​c​u​r​r​e​n​t​ ​v​a​l​u​e
-				 */
-				description: string
-			}
-			alertType: {
-				/**
-				 * A​l​e​r​t​ ​t​y​p​e
-				 */
-				label: string
-				/**
-				 * T​y​p​e​ ​o​f​ ​a​l​e​r​t
-				 */
-				description: string
-			}
-			message: {
-				/**
-				 * M​e​s​s​a​g​e
-				 */
-				label: string
-				/**
-				 * M​e​s​s​a​g​e​ ​t​o​ ​b​e​ ​s​e​n​t​ ​w​h​e​n​ ​t​h​e​ ​a​l​e​r​t​ ​i​s​ ​t​r​i​g​g​e​r​e​d
-				 */
-				description: string
-			}
-		}
+		/**
+		 * r​e​a​l​t​i​m​e
+		 */
+		realtime: string
+		/**
+		 * d​a​i​l​y
+		 */
+		daily: string
+		/**
+		 * M​e​s​s​a​g​e
+		 */
+		message: string
+		/**
+		 * C​u​s​t​o​m​ ​m​e​s​s​a​g​e​ ​f​o​r​ ​t​h​e​ ​n​o​t​i​f​i​c​a​t​i​o​n
+		 */
+		messageDescription: string
+		/**
+		 * E​n​t​e​r​ ​c​u​s​t​o​m​ ​m​e​s​s​a​g​e​.​.​.
+		 */
+		messagePlaceholder: string
+		/**
+		 * E​m​a​i​l​ ​n​o​t​i​f​i​c​a​t​i​o​n​s
+		 */
+		emailNotification: string
+		/**
+		 * R​e​c​e​i​v​e​ ​e​m​a​i​l​s​ ​f​o​r​ ​{​a​l​e​r​t​T​y​p​e​}​ ​a​l​e​r​t​s
+		 * @param {string} alertType
+		 */
+		receiveEmailsForAlerts: RequiredParams<'alertType'>
 		/**
 		 * T​h​i​s​ ​a​l​e​r​t​ ​i​s​ ​{​n​a​m​e​}
 		 * @param {string} name
@@ -137,6 +100,42 @@ type RootTranslation = {
 		 */
 		disabled: string
 	}
+	region: {
+		/**
+		 * R​e​p​u​b​l​i​c​ ​o​f​ ​I​r​e​l​a​n​d
+		 */
+		republicOfIreland: string
+		/**
+		 * N​o​r​t​h​e​r​n​ ​I​r​e​l​a​n​d
+		 */
+		northernIreland: string
+		/**
+		 * A​l​l​ ​I​r​e​l​a​n​d
+		 */
+		allIreland: string
+	}
+	path: {
+		/**
+		 * D​a​s​h​b​o​a​r​d
+		 */
+		dashboard: string
+		/**
+		 * A​l​e​r​t
+		 */
+		alert: string
+	}
+	/**
+	 * A​c​t​u​a​l
+	 */
+	actual: string
+	/**
+	 * F​o​r​e​c​a​s​t
+	 */
+	forecast: string
+	/**
+	 * A​v​e​r​a​g​e
+	 */
+	average: string
 	/**
 	 * O​p​t​i​o​n​a​l
 	 */
@@ -150,6 +149,10 @@ type RootTranslation = {
 	 */
 	save: string
 	/**
+	 * C​h​o​o​s​e​ ​d​a​t​e
+	 */
+	chooseDate: string
+	/**
 	 * L​o​a​d​i​n​g​ ​{​n​a​m​e​}​.​.​.
 	 * @param {string} name
 	 */
@@ -160,13 +163,29 @@ type RootTranslation = {
 	 */
 	failedToLoad: RequiredParams<'name'>
 	/**
+	 * N​e​t​ ​d​e​m​a​n​d
+	 */
+	netDemand: string
+	/**
+	 * N​e​t​ ​d​e​m​a​n​d​ ​r​e​p​r​e​s​e​n​t​s​ ​t​h​e​ ​e​l​e​c​t​r​i​c​i​t​y​ ​p​r​o​d​u​c​t​i​o​n​ ​b​y​ ​t​a​k​i​n​g​ ​t​h​e​ ​a​c​t​u​a​l​ ​a​n​d​ ​f​o​r​e​c​a​s​t​ ​s​y​s​t​e​m​ ​d​e​m​a​n​d​ ​a​n​d​ ​d​e​d​u​c​t​ ​t​h​e​m​ ​w​i​t​h​ ​t​h​e​ ​c​u​r​r​e​n​t​ ​w​i​n​d​ ​g​e​n​e​r​a​t​i​o​n​.​ ​T​h​e​ ​o​r​a​n​g​e​ ​l​i​n​e​ ​r​e​p​r​e​s​e​n​t​s​ ​t​h​e​ ​a​v​e​r​a​g​e​ ​v​a​l​u​e​.
+	 */
+	netDemandDescription: string
+	/**
 	 * S​y​s​t​e​m​ ​d​e​m​a​n​d
 	 */
 	systemDemand: string
 	/**
-	 * W​i​n​d​ ​G​e​n​e​r​a​t​i​o​n
+	 * S​y​s​t​e​m​ ​d​e​m​a​n​d​ ​r​e​p​r​e​s​e​n​t​s​ ​t​h​e​ ​e​l​e​c​t​r​i​c​i​t​y​ ​p​r​o​d​u​c​t​i​o​n​ ​r​e​q​u​i​r​e​d​ ​t​o​ ​m​e​e​t​ ​n​a​t​i​o​n​a​l​ ​c​o​n​s​u​m​p​t​i​o​n​.​ ​A​c​t​u​a​l​ ​a​n​d​ ​f​o​r​e​c​a​s​t​ ​S​y​s​t​e​m​ ​D​e​m​a​n​d​ ​a​r​e​ ​s​h​o​w​n​ ​i​n​ ​1​5​ ​m​i​n​u​t​e​ ​i​n​t​e​r​v​a​l​s​.
+	 */
+	systemDemandDescription: string
+	/**
+	 * W​i​n​d​ ​g​e​n​e​r​a​t​i​o​n
 	 */
 	windGeneration: string
+	/**
+	 * W​i​n​d​ ​G​e​n​e​r​a​t​i​o​n​ ​i​s​ ​a​n​ ​e​s​t​i​m​a​t​e​ ​o​f​ ​t​h​e​ ​t​o​t​a​l​ ​e​l​e​c​t​r​i​c​a​l​ ​o​u​t​p​u​t​ ​o​f​ ​a​l​l​ ​w​i​n​d​ ​f​a​r​m​s​ ​o​n​ ​t​h​e​ ​s​y​s​t​e​m​.​ ​A​c​t​u​a​l​ ​a​n​d​ ​F​o​r​e​c​a​s​t​ ​W​i​n​d​ ​G​e​n​e​r​a​t​i​o​n​ ​a​r​e​ ​s​h​o​w​n​ ​i​n​ ​1​5​ ​m​i​n​u​t​e​ ​i​n​t​e​r​v​a​l​s​.
+	 */
+	windGenerationDescription: string
 	/**
 	 * W​e​l​c​o​m​e​ ​t​o​ ​{​n​a​m​e​}
 	 * @param {string} name
@@ -210,72 +229,34 @@ export type TranslationFunctions = {
 		failedMagicLink: (arg: { email: string }) => LocalizedString
 	}
 	alert: {
-		newAlertForm: {
-			/**
-			 * By creating a new alert, you will receive notification once the specified condition was triggered.
-			 */
-			subtitle: () => LocalizedString
-			name: {
-				/**
-				 * Name
-				 */
-				label: () => LocalizedString
-				/**
-				 * Name of the alert
-				 */
-				description: () => LocalizedString
-			}
-			description: {
-				/**
-				 * Description
-				 */
-				label: () => LocalizedString
-				/**
-				 * Description of the alert
-				 */
-				description: () => LocalizedString
-			}
-			threshold: {
-				/**
-				 * Threshold
-				 */
-				label: () => LocalizedString
-				/**
-				 * Desired threshold (use in combination with comparator)
-				 */
-				description: () => LocalizedString
-			}
-			comparator: {
-				/**
-				 * Comparator
-				 */
-				label: () => LocalizedString
-				/**
-				 * To compare the threshold with the current value
-				 */
-				description: () => LocalizedString
-			}
-			alertType: {
-				/**
-				 * Alert type
-				 */
-				label: () => LocalizedString
-				/**
-				 * Type of alert
-				 */
-				description: () => LocalizedString
-			}
-			message: {
-				/**
-				 * Message
-				 */
-				label: () => LocalizedString
-				/**
-				 * Message to be sent when the alert is triggered
-				 */
-				description: () => LocalizedString
-			}
-		}
+		/**
+		 * realtime
+		 */
+		realtime: () => LocalizedString
+		/**
+		 * daily
+		 */
+		daily: () => LocalizedString
+		/**
+		 * Message
+		 */
+		message: () => LocalizedString
+		/**
+		 * Custom message for the notification
+		 */
+		messageDescription: () => LocalizedString
+		/**
+		 * Enter custom message...
+		 */
+		messagePlaceholder: () => LocalizedString
+		/**
+		 * Email notifications
+		 */
+		emailNotification: () => LocalizedString
+		/**
+		 * Receive emails for {alertType} alerts
+		 */
+		receiveEmailsForAlerts: (arg: { alertType: string }) => LocalizedString
 		/**
 		 * This alert is {name}
 		 */
@@ -293,6 +274,42 @@ export type TranslationFunctions = {
 		 */
 		disabled: () => LocalizedString
 	}
+	region: {
+		/**
+		 * Republic of Ireland
+		 */
+		republicOfIreland: () => LocalizedString
+		/**
+		 * Northern Ireland
+		 */
+		northernIreland: () => LocalizedString
+		/**
+		 * All Ireland
+		 */
+		allIreland: () => LocalizedString
+	}
+	path: {
+		/**
+		 * Dashboard
+		 */
+		dashboard: () => LocalizedString
+		/**
+		 * Alert
+		 */
+		alert: () => LocalizedString
+	}
+	/**
+	 * Actual
+	 */
+	actual: () => LocalizedString
+	/**
+	 * Forecast
+	 */
+	forecast: () => LocalizedString
+	/**
+	 * Average
+	 */
+	average: () => LocalizedString
 	/**
 	 * Optional
 	 */
@@ -306,6 +323,10 @@ export type TranslationFunctions = {
 	 */
 	save: () => LocalizedString
 	/**
+	 * Choose date
+	 */
+	chooseDate: () => LocalizedString
+	/**
 	 * Loading {name}...
 	 */
 	loading: (arg: { name: string }) => LocalizedString
@@ -314,13 +335,29 @@ export type TranslationFunctions = {
 	 */
 	failedToLoad: (arg: { name: string }) => LocalizedString
 	/**
+	 * Net demand
+	 */
+	netDemand: () => LocalizedString
+	/**
+	 * Net demand represents the electricity production by taking the actual and forecast system demand and deduct them with the current wind generation. The orange line represents the average value.
+	 */
+	netDemandDescription: () => LocalizedString
+	/**
 	 * System demand
 	 */
 	systemDemand: () => LocalizedString
 	/**
-	 * Wind Generation
+	 * System demand represents the electricity production required to meet national consumption. Actual and forecast System Demand are shown in 15 minute intervals.
+	 */
+	systemDemandDescription: () => LocalizedString
+	/**
+	 * Wind generation
 	 */
 	windGeneration: () => LocalizedString
+	/**
+	 * Wind Generation is an estimate of the total electrical output of all wind farms on the system. Actual and Forecast Wind Generation are shown in 15 minute intervals.
+	 */
+	windGenerationDescription: () => LocalizedString
 	/**
 	 * Welcome to {name}
 	 */

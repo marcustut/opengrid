@@ -12,46 +12,45 @@ const en = {
     failedMagicLink: 'Failed to send magic link to {email:string}',
   },
   alert: {
-    newAlertForm: {
-      subtitle:
-        'By creating a new alert, you will receive notification once the specified condition was triggered.',
-      name: {
-        label: 'Name',
-        description: 'Name of the alert',
-      },
-      description: {
-        label: 'Description',
-        description: 'Description of the alert',
-      },
-      threshold: {
-        label: 'Threshold',
-        description: 'Desired threshold (use in combination with comparator)',
-      },
-      comparator: {
-        label: 'Comparator',
-        description: 'To compare the threshold with the current value',
-      },
-      alertType: {
-        label: 'Alert type',
-        description: 'Type of alert',
-      },
-      message: {
-        label: 'Message',
-        description: 'Message to be sent when the alert is triggered',
-      },
-    },
+    realtime: 'realtime',
+    daily: 'daily',
+    message: 'Message',
+    messageDescription: 'Custom message for the notification',
+    messagePlaceholder: 'Enter custom message...',
+    emailNotification: 'Email notifications',
+    receiveEmailsForAlerts: 'Receive emails for {alertType:string} alerts',
     thisAlertIs: 'This alert is {name:string}',
     alert: 'Alert',
     active: 'Active',
     disabled: 'Disabled',
   },
+  region: {
+    republicOfIreland: 'Republic of Ireland',
+    northernIreland: 'Northern Ireland',
+    allIreland: 'All Ireland',
+  },
+  path: {
+    dashboard: 'Dashboard',
+    alert: 'Alert',
+  },
+  actual: 'Actual',
+  forecast: 'Forecast',
+  average: 'Average',
   optional: 'Optional',
   new: 'New',
   save: 'Save',
+  chooseDate: 'Choose date',
   loading: 'Loading {name:string}...',
   failedToLoad: 'Failed to load {name:string}',
+  netDemand: 'Net demand',
+  netDemandDescription:
+    'Net demand represents the electricity production by taking the actual and forecast system demand and deduct them with the current wind generation. The orange line represents the average value.',
   systemDemand: 'System demand',
-  windGeneration: 'Wind Generation',
+  systemDemandDescription:
+    'System demand represents the electricity production required to meet national consumption. Actual and forecast System Demand are shown in 15 minute intervals.',
+  windGeneration: 'Wind generation',
+  windGenerationDescription:
+    'Wind Generation is an estimate of the total electrical output of all wind farms on the system. Actual and Forecast Wind Generation are shown in 15 minute intervals.',
   welcomeTo: 'Welcome to {name:string}',
 } satisfies BaseTranslation;
 
